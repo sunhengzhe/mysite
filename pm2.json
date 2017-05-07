@@ -1,0 +1,24 @@
+{
+  "apps": [
+    {
+      "name": "mysite",
+      "script": "./bin/www",
+      "log_date_format": "YYYY-MM-DD HH:mm:SS",
+      "log_file": "logs/mysite.log",
+      "error_file": "logs/mysite-err.log",
+      "out_file": "logs/mysite-out.log",
+      "pid_file": "logs/mysite.pid",
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "env_dev": {
+        "NODE_ENV": "development"
+      },
+      "env_local": {
+        "NODE_ENV": "local"
+      },
+      "exec_mode" : "cluster_mode",
+      "watch": false
+    }
+  ]
+}

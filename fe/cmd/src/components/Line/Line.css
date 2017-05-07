@@ -1,0 +1,36 @@
+.line {
+    padding: .1em;
+    text-indent: .2em;
+}
+
+.space {
+  display: inline-block;
+  width: .5em;
+}
+
+.headIcon {
+  color: #67f86f;
+  width: 1em;
+  height: 1em;
+}
+
+.dir {
+  color: #68fdfe;
+}
+
+.cursor {
+    background-color: #ddd;
+    color: #fff !important;
+}
+
+.warning {
+    color: #fffa72;
+}
+
+.danger {
+    color: #c71e12;
+}
+
+.info {
+    color: #00c120;
+}
