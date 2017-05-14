@@ -23,9 +23,8 @@ app.use(cookieParser());
 app.use('/', routes);
 
 // 设置前端项目的静态目录
-app.use('/static', express.static(path.join(__dirname, 'public')));
-app.use('/cmd', express.static(path.join(__dirname, 'fe/cmd/build')));
-app.use('/system', express.static(path.join(__dirname, 'fe/system/build')));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'fe/m.system/build')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
