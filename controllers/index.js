@@ -26,9 +26,9 @@ router.get('/', function (req, res, next) {
 
     if (browser.versions.mobile || browser.versions.ios || browser.versions.android ||
         browser.versions.iPhone || browser.versions.iPad) {
-        res.sendFile(path.join(__dirname, '../fe/system/build/index.html'));
-    } else {
         res.sendFile(path.join(__dirname, '../fe/m.system/build/index.html'));
+    } else {
+        res.sendFile(path.join(__dirname, '../fe/system/build/index.html'));
     }
 });
 
