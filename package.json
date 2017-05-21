@@ -14,7 +14,9 @@
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
     "node-xlsx": "^0.7.4",
-    "serve-favicon": "~2.3.0"
+    "request": "^2.81.0",
+    "serve-favicon": "~2.3.0",
+    "socket.io": "^2.0.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.2",
