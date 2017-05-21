@@ -21,12 +21,16 @@ const firstNames = [
     '运气差的',
     '爱笑的',
     '傻逼的',
+    '娇弱的',
+    '呆头呆脑的',
     '牛逼哄哄的',
     '见人就砍的',
     '卖保险的',
     '色眯眯的',
     '胡言乱语的',
+    '游手好闲的',
     '神经兮兮的',
+    '一脸懵逼的',
 ];
 
 const lastNames = [
@@ -41,12 +45,15 @@ const lastNames = [
     '愣头青',
     '傻逼',
     '神经病',
+    '智障少年',
 ];
 
 // 应该存在 redis 里
 const groups = {
     onlineGroup: {},
 };
+
+const PORT = process.env.PORT || 3000;
 
 module.exports = (io) => {
     var wechat = io.of('/wechat');
@@ -56,8 +63,8 @@ module.exports = (io) => {
 
         const id = socket.id;
 
-        // 随机分配 TODO PORT
-        const usericon = `http://${ip}:3000/images/${headers[Math.floor(Math.random() * headers.length)]}`;
+        // 随机分配
+        const usericon = `http://${ip}:${PORT}/images/${headers[Math.floor(Math.random() * headers.length)]}`;
         const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
         const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
         const usernick = `${firstName}${lastName}`;
@@ -72,9 +79,29 @@ module.exports = (io) => {
         // 生成用户信息
         socket.emit('create userInfo', userInfo);
 
+        // 告诉其他人有人加入
+        wechat.emit('answer group total', {
+            chatid: 'onlineGroup',
+            total: Object.keys(groups.onlineGroup).length,
+        });
+        wechat.emit('someone enter', {
+            chatid: 'onlineGroup',
+            content: `欢迎${usernick}加入群聊！`,
+        });
+
         // 断开连接
         socket.on('disconnect', function (){
             delete groups.onlineGroup[socket.id];
+
+            // 告诉其他人有人加入
+            wechat.emit('answer group total', {
+                chatid: 'onlineGroup',
+                total: Object.keys(groups.onlineGroup).length,
+            });
+            socket.broadcast.emit('someone leave', {
+                chatid: 'onlineGroup',
+                content: `${usernick}退出了群聊`,
+            });
         });
 
         // 询问群组人数

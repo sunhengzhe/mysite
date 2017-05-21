@@ -9,7 +9,9 @@
       "out_file": "logs/mysite-out.log",
       "pid_file": "logs/mysite.pid",
       "env": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "PORT": 3000,
+        "CORS_PORT": 80
       },
       "env_dev": {
         "NODE_ENV": "development"

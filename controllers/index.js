@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
+const FRONT_PORT = process.env.CORS_PORT || 9527;
+
 router.use('*', (req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9527');
+    res.setHeader('Access-Control-Allow-Origin', `http://localhost:${FRONT_PORT}`);
     res.setHeader('Access-Control-Allow-Credentials', true);
     next();
 });
