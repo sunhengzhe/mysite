@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
+router.use('*', (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:9527');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+});
+
 router.use('/api', require('./api'));
 
 router.get('/', function (req, res, next) {
