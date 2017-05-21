@@ -64,7 +64,7 @@ module.exports = (io) => {
         const id = socket.id;
 
         // 随机分配
-        const usericon = `http://7xo08n.com1.z0.glb.clouddn.com/images/${headers[Math.floor(Math.random() * headers.length)]}`;
+        const usericon = `http://7xo08n.com1.z0.glb.clouddn.com/images/headers/${headers[Math.floor(Math.random() * headers.length)]}`;
         const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
         const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
         const usernick = `${firstName}${lastName}`;
