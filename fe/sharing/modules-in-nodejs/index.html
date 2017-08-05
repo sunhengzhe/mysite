@@ -1,0 +1,449 @@
+<!--
+    Powered By nodeppt - This is probably the best web presentation tool so far!
+    version: 1.4.5
+    site: https://github.com/ksky521/nodeppt
+    date: 
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Modules in Nodejs - By 孙恒哲</title>
+    <link rel="stylesheet" media="all" href="./css/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./css/phone.css">
+    
+    <link rel="stylesheet" href="./js/highlight/styles/monokai_sublime.css">
+    <link rel="stylesheet" href="./css/font-awesome.css">
+    
+<link rel="stylesheet" href="./css/theme.moon.css">
+</head>
+<body>
+<div class="slides">
+    <slides id="container">
+        <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Modules in Nodejs</h1>
+<p><small>@孙恒哲</small></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>CommonJS</h2>
+
+</hgroup><article>
+
+<ul class="fadeIn">
+<li><a href="http://wiki.commonjs.org/wiki/CommonJS" target="_blank">http://wiki.commonjs.org/wiki/CommonJS</a><ul class="fadeIn">
+<li><a href="http://wiki.commonjs.org/wiki/Modules/1.1.1" target="_blank">Modules/1.1.1</a></li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Contract</h2>
+
+</hgroup><article>
+
+<ul>
+<li class="moveIn">Require
+  <p>模块引用的方式和行为</p>
+  <code>require@function</code></li>
+<li class="moveIn">Module Context
+  <p>模块的上下文环境</p>
+  <code>exports@object</code>、<code>module@object</code></li>
+<li class="moveIn">Module Identifiers
+  <p>模块的标识，主要用于 require 的引入</p></li>
+</ul>
+
+</article></section></slide>
+<slide class="slide" data-on-keypress="showBlock"><section class="slide-wrapper"><hgroup>
+<h2>Implement</h2>
+
+</hgroup><article>
+
+<pre><code class="javascript">// format.js
+const moment = require(&#39;moment&#39;);
+/* 格式化时间戳 */
+exports.formatDate = function (timestamp) {
+    return moment(timestamp).format(&#39;YYYY-MM-DD HH:mm:ss&#39;);
+}
+</code></pre>
+<div id="add-header-and-footer" style="display:none;">
+    <p style="text-align:left">头部添加</p>
+    <pre><code class="javascript">
+    (function (exports, require, module, __filename, __dirname) {
+    </code></pre>
+
+    <p style="text-align:left">尾部添加</p>
+    <pre><code class="javascript">
+    });
+    </code></pre>
+</div><script>
+function showBlock(event) {
+    document.querySelector('#add-header-and-footer').style.display = 'block';
+}
+</script>
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Wrap</h2>
+
+</hgroup><article>
+
+<pre><code class="javascript">(function (exports, require, module, __filename, __dirname) {
+    // format.js
+    const moment = require(&#39;moment&#39;);
+    /* 格式化时间戳 */
+    exports.formatDate = function (timestamp) {
+        return moment(timestamp).format(&#39;YYYY-MM-DD HH:mm:ss&#39;);
+    }
+});
+</code></pre>
+<ul class="moveIn">
+<li>通过 <code>var</code>、<code>let</code>、<code>const</code> 定义的变量变成了局部变量；没有通过关键字声明的变量会泄露到全局</li>
+<li><code>exports</code> 是一个形参，改变 <code>exports</code> 的引用不会起作用</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"   data-on-build="Slide.magic" data-on-enter="Slide.magic.init"><section class="slide-wrapper"><div class="magic"><div class="magicItem current pagedown"  data-transition="vertical3d"><article>
+<div class="magic-wrapper">
+<article>
+<img src="./assets/isTrue.png" alt="is true?">
+
+</article>
+</div>
+</article></div>
+<div class="magicItem next pagedown"  data-transition="vertical3d"><article>
+<div class="magic-wrapper">
+<article>
+<img src="./assets/bad.png" alt="">
+
+</article>
+</div>
+</article></div>
+<div class="magicItem far-next pagedown"  data-transition="vertical3d"><article>
+<div class="magic-wrapper">
+<article>
+<img src="./assets/echo-arguments.png" alt="">
+
+</article>
+</div>
+</article></div>
+<div class="magicItem "  data-transition="vertical3d"><article>
+<div class="magic-wrapper">
+<article>
+<p>show me the code</p>
+<ul class="zoomIn">
+<li><a href="https://github.com/nodejs/node/blob/34d1b1144e1af8382dad71c28c8d956ebf709801/lib/internal/bootstrap_node.js#L545-L572" target="_blank">NativeModule</a></li>
+</ul>
+
+</article>
+</div>
+</article></div>
+<div class="magicItem "  data-transition="vertical3d"><article>
+<div class="magic-wrapper">
+<article>
+<pre><code class="javascript">// inject.js
+});
+
+(function () {
+    console.log(&#39;amazing&#39;);
+</code></pre>
+<pre><code class="bash">node inject.js
+amazing
+</code></pre>
+
+</article>
+</div>
+</article></div></div></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Module</h2>
+
+</hgroup><article>
+
+<pre><code class="bash">echo &quot;console.log(module)&quot; &gt; print-module.js
+node print-module.js
+</code></pre>
+<pre><code class="javascript">Module {
+  id: &#39;.&#39;,
+  exports: {},
+  parent: null,
+  filename: &#39;/Users/sunhengzhe/Documents/learn/node/modules/demo-1.js&#39;,
+  loaded: false,
+  children: [],
+  paths:
+   [ &#39;/Users/sunhengzhe/Documents/learn/node/modules/node_modules&#39;,
+     &#39;/Users/sunhengzhe/Documents/learn/node/node_modules&#39;,
+     &#39;/Users/sunhengzhe/Documents/learn/node_modules&#39;,
+     &#39;/Users/sunhengzhe/Documents/node_modules&#39;,
+     &#39;/Users/sunhengzhe/node_modules&#39;,
+     &#39;/Users/node_modules&#39;,
+     &#39;/node_modules&#39; ] }
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Module</h2>
+
+</hgroup><article>
+
+<pre><code class="bash">echo &quot;require(&#39;./print-module&#39;)&quot; &gt; index.js
+node index.js
+</code></pre>
+<pre><code class="javascript">Module {
+  id: &#39;/Users/sunhengzhe/Documents/learn/node/modules/print-module.js&#39;,
+  exports: {},
+  parent:
+   Module {
+     id: &#39;.&#39;,
+     exports: {},
+     parent: null,
+     filename: &#39;/Users/sunhengzhe/Documents/learn/node/modules/index.js&#39;,
+     loaded: false,
+     children: [ [Circular] ],
+     paths:
+      [...] },
+  filename: &#39;/Users/sunhengzhe/Documents/learn/node/modules/print-module.js&#39;,
+  loaded: false,
+  children: [],
+  paths:
+   [...] }
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Meaning</h2>
+
+</hgroup><article>
+
+<p><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L55-L64" target="_blank">source code</a></p>
+<ul class="bounceIn">
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L503" target="_blank">paths</a></li>
+<li>id</li>
+<li>loaded: track which modules have been loaded (true value) and which modules are still being loaded (false value).</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Load Module</h2>
+
+</hgroup><article>
+
+<ul>
+<li><p>无缓存（首次加载或清空缓存之后）</p>
+<ol>
+<li>路径分析</li>
+<li>文件定位</li>
+<li>编译执行</li>
+</ol>
+</li>
+<li><p>缓存（二次加载）</p>
+<ul>
+<li>直接读取缓存内容</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>How it works</h2>
+<ul class="fadeIn">
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L607-L612" target="_blank">Module.runMain()</a><ul class="fadeIn">
+<li>Module._load<ul class="fadeIn">
+<li>路径分析与文件定位</li>
+<li>如果是内置对象，使用 NativeModule.require</li>
+<li>生成 module 对象</li>
+<li>Module.tryModuleLoad<ul class="fadeIn">
+<li>module.load <ul class="fadeIn">
+<li>判断扩展名 </li>
+<li>编译执行</li>
+<li>.json: JSON.parse</li>
+<li>.node: dlopen</li>
+<li>.js: module._compile<ul class="fadeIn">
+<li>wrap </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>路径分析和文件定位</h2>
+
+</hgroup><article>
+
+<p><code>require(X);</code></p>
+<ul class="fadeIn">
+<li><a href="https://nodejs.org/dist/latest-v6.x/docs/api/modules.html#modules_all_together" target="_blank">document</a></li>
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L439" target="_blank">source code</a><ul>
+<li>_load</li>
+<li>_resolveFilename<ul>
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L331-L424" target="_blank">_resolveLookupPaths</a></li>
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L163-L241" target="_blank">_findPath</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>编译执行</h2>
+
+</hgroup><article>
+
+<ul>
+<li>扩展名分析<ul>
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L331-L424" target="_blank">document</a></li>
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L582-L603" target="_blank">source code</a></li>
+</ul>
+</li>
+<li>加载<ul>
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L498-L509" target="_blank">source code</a></li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Cache</h2>
+
+</hgroup><article>
+
+<pre><code class="bash">echo &quot;console.log(&#39;***&#39;)&quot; &gt; print.js
+</code></pre>
+<pre><code class="javascript">// index.js
+require(&#39;./print&#39;);
+require(&#39;./print&#39;);
+</code></pre>
+<ul>
+<li>为什么只输出一次 <code>***</code></li>
+<li>怎么让输出多次？</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>require()</h2>
+<ul class="zoomIn">
+<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L565" target="_blank">require 是如何工作的</a><ul>
+<li><a href="https://github.com/nodejs/node/blob/34d1b1144e1af8382dad71c28c8d956ebf709801/lib/internal/module.js#L5-L31" target="_blank">makeRequireFunction</a></li>
+<li>require.resolve</li>
+<li>require.main</li>
+<li>require.extensions</li>
+<li>require.cache</li>
+</ul>
+</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>clear cache</h2>
+
+</hgroup><article>
+
+<pre><code class="javascript">require(&#39;./print&#39;);
+// delete cache
+delete require.cache[require.resolve(&#39;./print&#39;)];
+require(&#39;./print&#39;);
+</code></pre>
+<pre><code class="javascript">exports.print = function () {
+    console.log(&#39;***&#39;);
+}
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>参考</h2>
+
+</hgroup><article>
+
+<ul>
+<li>朴灵《深入浅出 Node.js》</li>
+<li><a href="https://medium.freecodecamp.org/requiring-modules-in-node-js-everything-you-need-to-know-e7fbd119be8" target="_blank">requiring-modules-in-node-js-everything-you-need-to-know</a></li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>Thanks</h2>
+
+</article></section></slide>
+        
+
+        <!-- <slide class="slide logoslide dark nobackground">
+            <article class="flexbox vcenter">
+                <h2 style="color: white;">Powered By nodeppt v1.4.5</h2>
+            </article>
+        </slide> -->
+        <div class="slideTip" id="tip"></div>
+    </slides>
+</div>
+<canvas id="drawBoard" class="draw-board" width="900" height="700"></canvas>
+<div class="progress"><span id="progress"></span></div>
+<div id="_buttons">
+    <div class="_btn-box" id="_btn-box" style="display:none;">
+        <button class="fa fa-arrow-circle-left" id="_btn-prev"></button>
+        <button class="fa fa-arrow-circle-right" id="_btn-next"></button>
+        <button class="fa fa-paint-brush" id="_btn-brush"></button>
+        <button class="fa fa-compress" id="_btn-overview" data-toggle="fa fa-expand"></button>
+    </div>
+    <button class="fa fa-bars" id="_btn-bar"  data-toggle="fa fa-close"></button>
+</div>
+<script src="./js/mixjs/lib/mix.0.3.0.min.js"></script>
+<script>
+    var ASSET_RELATIVE_DIR = ".";
+</script>
+<script>
+var base = location.protocol + '//' + location.host;
+
+var path = (location.pathname + '#').split('/').filter(function(v){
+    return !!v;
+});
+path.pop();
+path = path.join('/');
+if (typeof ASSET_RELATIVE_DIR === 'string') {
+    path = path + '/' + ASSET_RELATIVE_DIR;
+}
+MixJS.config({
+    baseURL: [ base, path, 'js'].join('/')+'/'
+});
+
+</script>
+<script src="./js/mixjs/lib/event/broadcast.js"></script>
+<script src="./js/nodeppt.js"></script>
+<script>
+Slide.init({
+    containerID: 'container',
+    drawBoardID: 'drawBoard',
+    slideClass: '.slide',
+    buildClass: '.build',
+    progressID: 'progress',
+    transition: 'zoomin',
+    width: 1100,
+    dir: './',
+    
+    //打开下面的注释就开启postMessage方式
+    //访问网址127.0.0.1:8080/ppt/demo#client
+    control:{
+        type: 'postMessage',
+        args:{
+            isControl:  false
+        }
+    },
+    
+    tipID: 'tip'
+});
+MixJS.loadJS('highlight/highlight.pack.js',function(){
+    hljs.tabReplace = '  ';
+    hljs.initHighlightingOnLoad();
+});
+</script>
+
+
+<!--placeholder-->
+</body>
+</html>
