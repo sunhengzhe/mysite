@@ -25,6 +25,7 @@ app.use('/', routes);
 // 设置前端项目的静态目录
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'fe/m.system/build')));
+app.use('/sharing', express.static(path.join(__dirname, 'fe/sharing/modules-in-nodejs')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

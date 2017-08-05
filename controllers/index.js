@@ -12,6 +12,10 @@ router.use('*', (req, res, next) => {
 
 router.use('/api', require('./api'));
 
+router.get('/sharing/modules-in-nodejs', function (req, res) {
+    res.sendFile(path.join(__dirname, '../fe/sharing/modules-in-nodejs/index.html'));
+});
+
 router.get('/', function (req, res, next) {
     const deviceAgent = req.headers["user-agent"];
     const browser = {
