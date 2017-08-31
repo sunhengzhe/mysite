@@ -55,8 +55,8 @@
 </ul>
 
 </article></section></slide>
-<slide class="slide" data-on-keypress="showBlock"><section class="slide-wrapper"><hgroup>
-<h2>Implement</h2>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Usage</h2>
 
 </hgroup><article>
 
@@ -67,21 +67,38 @@ exports.formatDate = function (timestamp) {
     return moment(timestamp).format(&#39;YYYY-MM-DD HH:mm:ss&#39;);
 }
 </code></pre>
-<div id="add-header-and-footer" style="display:none;">
-    <p style="text-align:left">头部添加</p>
-    <pre><code class="javascript">
-    (function (exports, require, module, __filename, __dirname) {
-    </code></pre>
 
-    <p style="text-align:left">尾部添加</p>
-    <pre><code class="javascript">
-    });
-    </code></pre>
-</div><script>
-function showBlock(event) {
-    document.querySelector('#add-header-and-footer').style.display = 'block';
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>?</h2>
+<p><code>module</code>、<code>require</code>、<code>exports</code> 在哪里定义的</p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>Implement</h2>
+
+</hgroup><article>
+
+<p style="text-align:left">头部添加</p>
+<pre><code class="javascript">
+(function (exports, require, module, <strong>filename, </strong>dirname) {
+</code></pre>
+
+<p style="text-align:left">内容</p>
+
+<pre><code class="javascript">// format.js
+const moment = require(&#39;moment&#39;);
+/* 格式化时间戳 */
+exports.formatDate = function (timestamp) {
+    return moment(timestamp).format(&#39;YYYY-MM-DD HH:mm:ss&#39;);
 }
-</script>
+</code></pre>
+<p><p style="text-align:left">尾部添加</p></p>
+<p><pre><code class="javascript">
+});
+</code></pre>
+</script></p>
+
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
 <h2>Wrap</h2>
@@ -114,7 +131,7 @@ function showBlock(event) {
 <div class="magicItem next pagedown"  data-transition="vertical3d"><article>
 <div class="magic-wrapper">
 <article>
-<img src="./assets/bad.png" alt="">
+<img src="./assets/bad.png" alt="bad">
 
 </article>
 </div>
@@ -122,7 +139,7 @@ function showBlock(event) {
 <div class="magicItem far-next pagedown"  data-transition="vertical3d"><article>
 <div class="magic-wrapper">
 <article>
-<img src="./assets/echo-arguments.png" alt="">
+<img src="./assets/echo-arguments.png" alt="echo-arguments">
 
 </article>
 </div>
@@ -132,7 +149,7 @@ function showBlock(event) {
 <article>
 <p>show me the code</p>
 <ul class="zoomIn">
-<li><a href="https://github.com/nodejs/node/blob/34d1b1144e1af8382dad71c28c8d956ebf709801/lib/internal/bootstrap_node.js#L545-L572" target="_blank">NativeModule</a></li>
+<li><a href="https://github.com/nodejs/node/blob/34d1b1144e1af8382dad71c28c8d956ebf709801/lib/module.js#L532-L541" target="_blank">module.js</a></li>
 </ul>
 
 </article>
@@ -181,45 +198,28 @@ node print-module.js
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
-<h2>Module</h2>
+<h2>Module.id</h2>
 
 </hgroup><article>
 
-<pre><code class="bash">echo &quot;require(&#39;./print-module&#39;)&quot; &gt; index.js
-node index.js
-</code></pre>
-<pre><code class="javascript">Module {
-  id: &#39;/Users/sunhengzhe/Documents/learn/node/modules/print-module.js&#39;,
-  exports: {},
-  parent:
-   Module {
-     id: &#39;.&#39;,
-     exports: {},
-     parent: null,
-     filename: &#39;/Users/sunhengzhe/Documents/learn/node/modules/index.js&#39;,
-     loaded: false,
-     children: [ [Circular] ],
-     paths:
-      [...] },
-  filename: &#39;/Users/sunhengzhe/Documents/learn/node/modules/print-module.js&#39;,
-  loaded: false,
-  children: [],
-  paths:
-   [...] }
-</code></pre>
+<ul>
+<li>入口文件为 <code>.</code></li>
+<li>其他文件为文件绝对路径名</li>
+</ul>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
-<h2>Meaning</h2>
+<h2>Module.parent &amp; Module.children</h2>
 
 </hgroup><article>
 
-<p><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L55-L64" target="_blank">source code</a></p>
-<ul class="bounceIn">
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L503" target="_blank">paths</a></li>
-<li>id</li>
-<li>loaded: track which modules have been loaded (true value) and which modules are still being loaded (false value).</li>
-</ul>
+<p>调用方和被调用方</p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>Module.loaded</h2>
+<h2>文件加载完毕之后置为 true</h2>
+<p><a href="https://github.com/nodejs/node/blob/34d1b1144e1af8382dad71c28c8d956ebf709801/lib/module.js#L505-L508" target="_blank">source code</a></p>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
@@ -227,47 +227,35 @@ node index.js
 
 </hgroup><article>
 
+<p><p style="text-align:left"><a href="https://github.com/nodejs/node/blob/34d1b1144e1af8382dad71c28c8d956ebf709801/lib/module.js#L427-L433" target="_blank">Module._load</a></p>
+<br></p>
+<blockquote>
+<p>Check the cache for the requested file.</p>
+<ol>
+<li>If a module already exists in the cache: return its exports object.</li>
+<li>If the module is native: call <code>NativeModule.require()</code> with the
+filename and return the result.</li>
+<li>Otherwise, create a new module for the file and save it to the cache.
+Then have it load  the file contents before returning its exports
+object.</li>
+</ol>
+</blockquote>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>Load Module</h2>
 <ul>
+<li><p>缓存（二次加载）</p>
+<ul>
+<li>直接读取缓存内容</li>
+</ul>
+</li>
 <li><p>无缓存（首次加载或清空缓存之后）</p>
 <ol>
 <li>路径分析</li>
 <li>文件定位</li>
 <li>编译执行</li>
 </ol>
-</li>
-<li><p>缓存（二次加载）</p>
-<ul>
-<li>直接读取缓存内容</li>
-</ul>
-</li>
-</ul>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>How it works</h2>
-<ul class="fadeIn">
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L607-L612" target="_blank">Module.runMain()</a><ul class="fadeIn">
-<li>Module._load<ul class="fadeIn">
-<li>路径分析与文件定位</li>
-<li>如果是内置对象，使用 NativeModule.require</li>
-<li>生成 module 对象</li>
-<li>Module.tryModuleLoad<ul class="fadeIn">
-<li>module.load <ul class="fadeIn">
-<li>判断扩展名 </li>
-<li>编译执行</li>
-<li>.json: JSON.parse</li>
-<li>.node: dlopen</li>
-<li>.js: module._compile<ul class="fadeIn">
-<li>wrap </li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
 </li>
 </ul>
 
@@ -277,19 +265,8 @@ node index.js
 
 </hgroup><article>
 
-<p><code>require(X);</code></p>
-<ul class="fadeIn">
-<li><a href="https://nodejs.org/dist/latest-v6.x/docs/api/modules.html#modules_all_together" target="_blank">document</a></li>
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L439" target="_blank">source code</a><ul>
-<li>_load</li>
-<li>_resolveFilename<ul>
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L331-L424" target="_blank">_resolveLookupPaths</a></li>
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L163-L241" target="_blank">_findPath</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+<p>require(X);</p>
+<p><code>internalModule.makeRequireFunction</code> -&gt; <code>Module.prototype.require</code> -&gt; <code>_load</code></p>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
@@ -328,17 +305,22 @@ require(&#39;./print&#39;);
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article>
-<h2>require()</h2>
-<ul class="zoomIn">
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L565" target="_blank">require 是如何工作的</a><ul>
-<li><a href="https://github.com/nodejs/node/blob/34d1b1144e1af8382dad71c28c8d956ebf709801/lib/internal/module.js#L5-L31" target="_blank">makeRequireFunction</a></li>
-<li>require.resolve</li>
-<li>require.main</li>
-<li>require.extensions</li>
-<li>require.cache</li>
-</ul>
-</li>
-</ul>
+<h2>Module._cache</h2>
+<pre><code class="javascript">var cachedModule = Module._cache[filename];
+if (cachedModule) {
+    // 更新 parent 的 children
+    updateChildren(parent, cachedModule, true);
+    return cachedModule.exports;
+}
+
+//...
+
+Module._cache[filename] = module;
+
+tryModuleLoad(module, filename);
+
+//...
+</code></pre>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
@@ -355,6 +337,20 @@ require(&#39;./print&#39;);
     console.log(&#39;***&#39;);
 }
 </code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><hgroup>
+<h2>debug of node&#39;s source code</h2>
+
+</hgroup><article>
+
+<ul>
+<li>下载 node 源码 <code>git@github.com:nodejs/node.git</code></li>
+<li>进入源码目录 <code>./configure</code> &amp; <code>make -j</code></li>
+<li>使用 <code>${源码目录}/out/Release/node</code> 作为你的 node 执行文件</li>
+<li>以后每次修改源码执行 <code>make</code> 命令即可
+```</li>
+</ul>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
