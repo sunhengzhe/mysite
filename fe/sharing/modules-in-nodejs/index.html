@@ -171,6 +171,24 @@ amazing
 </article>
 </div>
 </article></div></div></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>Core</h2>
+<ul>
+<li><code>/lib/module.js</code> 加载非内置模块</li>
+<li><code>/lib/internal/module.js</code> 提供一些相关方法</li>
+<li><code>/lib/internal/bootstrap_node</code> 定义了加载内置模块的 NativeModule，同时这也是 node 的入口文件</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>Invoke</h2>
+<img src="./assets/file_invoking.png" alt="bad">
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>Module</h2>
+
+</article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
 <h2>Module</h2>
 
@@ -222,6 +240,10 @@ node print-module.js
 <p><a href="https://github.com/nodejs/node/blob/34d1b1144e1af8382dad71c28c8d956ebf709801/lib/module.js#L505-L508" target="_blank">source code</a></p>
 
 </article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>模块的加载</h2>
+
+</article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
 <h2>Load Module</h2>
 
@@ -260,13 +282,39 @@ object.</li>
 </ul>
 
 </article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>无缓存</h2>
+
+</article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
 <h2>路径分析和文件定位</h2>
 
 </hgroup><article>
 
-<p>require(X);</p>
-<p><code>internalModule.makeRequireFunction</code> -&gt; <code>Module.prototype.require</code> -&gt; <code>_load</code></p>
+<h3>require(X);</h3>
+<p class="zoomIn"><span><code>internalModule.makeRequireFunction</code> -&gt; <code>Module.prototype.require</code> -&gt; <code>_load</code> <span></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h3>require(X);</h3>
+<p>
+<a href="https://nodejs.org/dist/latest-v8.x/docs/api/modules.html#modules_all_together" target="_blank">Node.js Document</a>
+</p>
+
+<ul class="zoomIn">
+<li>尝试加载核心模块</li>
+<li>尝试以文件形式加载<ul class="zoomIn">
+<li>X</li>
+<li>X.js</li>
+<li>X.json</li>
+<li>X.node</li>
+</ul>
+</li>
+<li>尝试作为目录查找，寻找 package.json 文件，尝试加载 main 字段指定的文件</li>
+<li>尝试作为目录查找，寻找 index.js、index.json、index.node</li>
+<li>尝试作为第三方模块进行加载</li>
+<li>抛出异常</li>
+</ul>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
@@ -274,17 +322,11 @@ object.</li>
 
 </hgroup><article>
 
-<ul>
-<li>扩展名分析<ul>
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L331-L424" target="_blank">document</a></li>
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L582-L603" target="_blank">source code</a></li>
-</ul>
-</li>
-<li>加载<ul>
-<li><a href="https://github.com/nodejs/node/blob/master/lib/module.js#L498-L509" target="_blank">source code</a></li>
-</ul>
-</li>
-</ul>
+<p>支持 <code>.js</code>、<code>.json</code>、<code>.node</code> 三种格式</p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>缓存</h2>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
@@ -323,6 +365,24 @@ tryModuleLoad(module, filename);
 </code></pre>
 
 </article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<p>/lib/internal/module.js</p>
+<pre><code class="javascript">function makeRequireFunction(mod) {
+  // ...
+
+  require.resolve = resolve;
+
+  require.main = process.mainModule;
+
+  require.extensions = Module._extensions;
+
+  require.cache = Module._cache; // export cache
+
+  return require;
+}
+</code></pre>
+
+</article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><hgroup>
 <h2>clear cache</h2>
 
@@ -348,8 +408,7 @@ require(&#39;./print&#39;);
 <li>下载 node 源码 <code>git@github.com:nodejs/node.git</code></li>
 <li>进入源码目录 <code>./configure</code> &amp; <code>make -j</code></li>
 <li>使用 <code>${源码目录}/out/Release/node</code> 作为你的 node 执行文件</li>
-<li>以后每次修改源码执行 <code>make</code> 命令即可
-```</li>
+<li>以后每次修改源码执行 <code>make</code> 命令即可</li>
 </ul>
 
 </article></section></slide>
@@ -360,6 +419,7 @@ require(&#39;./print&#39;);
 
 <ul>
 <li>朴灵《深入浅出 Node.js》</li>
+<li><a href="https://nodejs.org/dist/latest-v8.x/docs/api/modules.html" target="_blank">Node.js Documentation</a></li>
 <li><a href="https://medium.freecodecamp.org/requiring-modules-in-node-js-everything-you-need-to-know-e7fbd119be8" target="_blank">requiring-modules-in-node-js-everything-you-need-to-know</a></li>
 </ul>
 
