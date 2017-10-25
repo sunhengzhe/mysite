@@ -20,7 +20,8 @@
         "NODE_ENV": "local"
       },
       "exec_mode" : "cluster_mode",
-      "watch": false
+      "watch": false,
+      "instance": 0
     }
   ]
 }

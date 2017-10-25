@@ -4,6 +4,31 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const winston = require('winston');
+const winstonDailyRotateFile = require('winston-daily-rotate-file')
+
+const logPath = './logs/framework.log';
+const logFolder = path.dirname(logPath);
+
+try {
+    fs.mkdirSync(logFolder);
+    winston.info('log folder created', logFolder);
+} catch (err) {
+    winston.info('log folder already exist', logFolder);
+}
+
+winston.remove(winston.transports.Console);
+winston.add(winstonDailyRotateFile, {
+    filename: logPath,
+    dirname: path.dirname(logPath),
+    datePattern: '.yyyy-MM-dd',
+    colorize: false,
+    level: 'debug',
+    json: true,
+    timestamp() {
+        return moment().format('YYYY-MM-DD HH:mm:ss');
+    },
+});
 
 var routes = require('./controllers/index');
 
