@@ -58,20 +58,29 @@ router.post('/handle', (req, res, next) => {
                 return res.send('success');
             }
 
-            const { ToUserName, FromUserName, Content } = result;
+            try {
+                const {
+                    xml: {
+                        ToUserName, FromUserName, Content
+                    }
+                } = result;
 
-            const reply = {
-                ToUserName: FromUserName,
-                FromUserName: ToUserName,
-                CreateTime: +new Date(),
-                MsgType: 'text',
-                Content: `
-                    欢迎
-                    you are my secret
-                `
-            };
+                const reply = {
+                    ToUserName: FromUserName[0],
+                    FromUserName: ToUserName[0],
+                    CreateTime: +new Date(),
+                    MsgType: 'text',
+                    Content: `
+                        欢迎
+                        you are my secret
+                    `
+                };
 
-            return res.send(xmlBuilder.buildObject(reply));
+                return res.send(xmlBuilder.buildObject(reply));
+            } catch (error) {
+                logger.error('api.wx.post.handle.reply', error);
+                return res.send('success');
+            }
         });
     });
 
