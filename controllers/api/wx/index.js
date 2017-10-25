@@ -13,10 +13,10 @@ const router = express.Router();
  */
 router.get('/handle', (req, res, next) => {
     const {
-        signature = '499172f8974aaa9cd87fd766ae54e36a5443017b',
-        timestamp = '2017-10-25 22:56:08',
-        nonce = '180802211',
-        echostr = '16751326018643340984',
+        signature,
+        timestamp,
+        nonce,
+        echostr,
     } = req.query;
 
     const token = config.token;
