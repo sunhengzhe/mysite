@@ -42,28 +42,39 @@ router.get('/handle', (req, res, next) => {
  * 获取消息
  */
 router.post('/handle', (req, res, next) => {
-    const msg = req.body;
+    req.rawBody = '';
 
-    parseString(msg, function (err, result) {
-        if (err) {
-            logger.error('api.wx.post.handle', err);
-            return res.send('success');
-        }
+    req.on('data', function(chunk) {
+        req.rawBody += chunk;
+    });
 
-        const { ToUserName, FromUserName, Content } = result;
+    req.on('end', function() {
+        parseString(req.rawBody, function (err, result) {
+            if (err) {
+                logger.error('api.wx.post.handle.parse', err);
+                return res.send('success');
+            }
 
-        const reply = {
-            ToUserName: FromUserName,
-            FromUserName: ToUserName,
-            CreateTime: +new Date(),
-            MsgType: 'text',
-            Content: `
-                欢迎
-                you are my secret
-            `
-        };
+            const { ToUserName, FromUserName, Content } = result;
 
-        return res.send(xmlBuilder.buildObject(reply));
+            const reply = {
+                ToUserName: FromUserName,
+                FromUserName: ToUserName,
+                CreateTime: +new Date(),
+                MsgType: 'text',
+                Content: `
+                    欢迎
+                    you are my secret
+                `
+            };
+
+            return res.send(xmlBuilder.buildObject(reply));
+        });
+    });
+
+    req.on('error', function(err) {
+        logger.error('api.wx.post.handle.onerror', err);
+        return res.send('success');
     });
 });
 
