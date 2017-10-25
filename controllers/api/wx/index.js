@@ -3,7 +3,10 @@ const crypto = require('crypto');
 const logger = require('winston');
 const config = require('./config');
 const { parseString, Builder } = require('xml2js');
-const xmlBuilder = new Builder();
+const xmlBuilder = new Builder({
+    rootName: 'xml',
+    headless: true,
+});
 
 const router = express.Router();
 
