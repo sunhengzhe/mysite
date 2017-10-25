@@ -21,7 +21,7 @@
       },
       "exec_mode" : "cluster_mode",
       "watch": false,
-      "instance": 0
+      "instances": 0
     }
   ]
 }

@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const moment = require('moment');
 const winston = require('winston');
 const winstonDailyRotateFile = require('winston-daily-rotate-file')
 
